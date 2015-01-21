@@ -226,7 +226,7 @@ class User(SingletonAPIResource):
         return r.json().get('token')
 
 
-class Node(ListAPIResource):
+class Node(ListAPIResource, CreateUpdateAPIResource):
 
     @property
     def feeds(self):

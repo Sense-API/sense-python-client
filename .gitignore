@@ -1,3 +1,11 @@
 .coverage
 .svn
 dist
+*.pyc
+.Python
+.idea
+
+# Virtualenv
+bin
+include
+lib
