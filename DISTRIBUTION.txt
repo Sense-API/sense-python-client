@@ -1,0 +1,19 @@
+Build the package
+~~~~~~~~~~~~~~~~~
+
+    $ python setup.py sdist
+
+Register the package
+~~~~~~~~~~~~~~~~~~~
+
+Use the online form, https://testpypi.python.org/pypi?%3Aaction=submit_form
+Don't fill it but instead upload the PKG-INFO file created by setup.py sdist (<package>.egg-info/PKG-INFO)
+
+Upload to PyPI
+~~~~~~~~~~~~~
+
+    $ python setup.py sdist upload -r pypi
+
+Assuming you have a pypi entry in your .pypirc file.
+Cf. http://peterdowns.com/posts/first-time-with-pypi.html
+
