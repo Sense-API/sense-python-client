@@ -1,9 +1,14 @@
 .idea
 .coverage
 .svn
+.Python
+*.pyc
+
+# Build folderrs
 dist
+local
+
+# Virtualenv
 bin
 include
 lib
-local
-*.pyc
