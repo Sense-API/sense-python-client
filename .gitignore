@@ -12,3 +12,6 @@ local
 bin
 include
 lib
+
+# iPython
+share
