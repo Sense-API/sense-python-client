@@ -14,3 +14,6 @@ sense_python_client.egg-info
 bin
 include
 lib
+
+# iPython
+share
