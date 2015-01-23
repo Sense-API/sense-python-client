@@ -11,6 +11,7 @@ import sense
 from sense.resources import APIResource, ListAPIResource
 
 DEFAULT_USER = 'pierre'
+API_URL = 'http://localhost:8000/api/v2'
 
 DUMMY_NODE = {
     "object": "node",
@@ -403,10 +404,19 @@ class TestIntegration(unittest.TestCase):
             body=json.dumps({'objects': [{'object': 'feed'}]})
         )
 
+        httpretty.register_uri(
+            httpretty.GET, sense.api_url + '/nodes/testuid/feeds/testtype/',
+            body=json.dumps({'object': 'feed'})
+        )
+
         node = sense.Node.retrieve('testuid')
+        self.assertIsInstance(node, sense.Node)
 
         feeds = node.feeds.list()
         self.assertIsInstance(feeds.objects[0], sense.Feed)
+
+        feed = node.feeds.retrieve('testtype')
+        self.assertIsInstance(feed, sense.Feed)
 
     def test_nested_token(self):
         dummy_token = 'blah'
@@ -424,9 +434,9 @@ class TestsIntegrationLiveServer(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # sense.api_url = POINT TO A LIVE API HERE
         u = DEFAULT_USER # the name of a sen.se user with a node and a subscription
         p = getpass() # ... its password
+        sense.api_url = API_URL
         sense.api_key = sense.User.api_key(username=u, password=p)
         r = requests.get(sense.api_url +  '/docinfo/', auth=(u, p))
         cls.fixtures = r.json()

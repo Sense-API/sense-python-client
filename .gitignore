@@ -1,3 +1,9 @@
+.idea
 .coverage
 .svn
 dist
+bin
+include
+lib
+local
+*.pyc

@@ -81,11 +81,9 @@ class APIResource(dict):
                 'Could not determine which URL to request: %s instance '
                 'has invalid ID: %r' % (type(self).__name__, uid), 'id')
 
-        uid = uid or self.get('uid')
-        uid = utils.utf8(uid)
-        base = self._class_url()
+        uid = utils.utf8(self.get('uid', uid))
         extn = urllib.quote_plus(uid)
-        return "%s%s/" % (base, extn)
+        return "%s%s/" % (self._class_url(), extn)
 
     @classmethod
     def construct_from(cls, values):
@@ -274,11 +272,14 @@ class Feed(ListAPIResource):
         return ''.join((cls.node_obj.instance_url(), cls._class_name(), 's/'))
 
     def instance_url(self, uid=None):
-        if self.get('node_uid') and self.get('type'):
-            return '{url}{type}/'.format(url=self._class_url(), type=self.type)
+        if self.get('node_uid') and (self.get('type') or uid):
+            return '{url}{type}/'.format(
+                url=self._class_url(), type=self.get('type') or uid)
+
         elif uid or self.get('uid'):
             f_copy = Feed(uid or self.get('uid'))
             return super(Feed, f_copy).instance_url(uid=uid)
+
         else:
             raise AttributeError('No uid or node uid + type provided')
 
