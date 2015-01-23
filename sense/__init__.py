@@ -7,3 +7,4 @@ api_url = 'https://sen.se/api/v2'
 
 from resources import User, Node, Feed, Subscription, Event
 from resources import Device, Application, Person
+from version import VERSION
