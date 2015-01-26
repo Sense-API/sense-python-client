@@ -119,8 +119,8 @@ DUMMY_FEED = {
 class TestUtils(unittest.TestCase):
 
     def test_process_params(self):
-        from sense.utils import process_params
-        d = process_params({
+        from sense.utils import expand
+        d = expand({
             'expand': ['devices','applications'],
             'limit': 12
         })
@@ -396,6 +396,7 @@ class TestIntegration(unittest.TestCase):
         sense.Feed('testuid').events.create(**params)
         last_request = httpretty.last_request()
         self.assertEqual(last_request.headers.get('Authorization'), 'Token apikey')
+        self.assertEqual(last_request.headers.get('User-Agent'), sense.user_agent)
 
     def test_nested_Feeds(self):
 
