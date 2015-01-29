@@ -363,7 +363,7 @@ class Event(APIResource):
         """
         s, api_url, params = prepare_request(params)
         url = ''.join((api_url, self.feed_obj.instance_url().rstrip('/'), Event._class_url()))
-        r = s.post(url, data=json.dumps(params))
+        r = s.post(url, data=json.dumps(params), headers=dict(s.headers, **{'Content-Type': 'application/json'}))
         r.raise_for_status()
 
 
