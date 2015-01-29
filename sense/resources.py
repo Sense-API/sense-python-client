@@ -43,6 +43,9 @@ def filter_feeds(feeds):
             yield f
 
 def prepare_request(params=None):
+    """
+    This allows each functions using requests to override auth parameters.
+    """
 
     # Find and remove request settings from the parameters
     from . import api_url, api_key, app_secret, user_agent
@@ -356,7 +359,7 @@ class Event(APIResource):
         >>> feed = sense.Feed('{{ feed.uid }}')
         >>> data = {'key': 'value', 'other-key': 'other-value' }
         >>> cur_date = datetime.datetime.utcnow()
-        >>> feed.events.create(data=data, dateEvent=cur_date.isoformat(), dateServer=cur_date.utcnow())
+        >>> feed.events.create(data=data, dateEvent=cur_date.isoformat())
         """
         s, api_url, params = prepare_request(params)
         url = ''.join((api_url, self.feed_obj.instance_url().rstrip('/'), Event._class_url()))
