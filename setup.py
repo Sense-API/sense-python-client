@@ -10,10 +10,10 @@ from version import VERSION
 
 setup(
     name='sense-python-client',
-    version='1.0.0',
+    version=VERSION,
     description='Sen.se API client',
     long_description='',
-    url='http://sen.se/api/docs/v2',
+    url='https://sen.se/developers/',
     author='Sen.se',
     author_email='api@sen.se',
     license='MIT',

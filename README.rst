@@ -4,29 +4,21 @@ Sen.se API client
 
 This is a client for the Sen.se API.
 
-Installation:
+Installation::
 
     $ pip install sense-python-client
 
-Documentation:
+Documentation: `https://sen.se/developers/ <https://sen.se/developers/>`_
 
-    https://sen.se/developers/
+Development
+~~~~~~~~~~~
 
-Dev
----
-
-Install requirements
-~~~~~~~~~~~~~~~~~~~~
+Requirements::
 
     $ pip install -r requirements.txt
 
-Run the tests
-~~~~~~~~~~~~~
+Run the tests::
 
     $ python tests.py
-
-Coverage
-~~~~~~~~
-
     $ coverage run tests.py
     $ coverage report --show-missing --include="sense/*"
