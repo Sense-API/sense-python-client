@@ -27,8 +27,8 @@ setup(
         'Programming Language :: Python :: 2.7',
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    # https://caremad.io/2013/07/setup-vs-requirement/
     packages=['sense'],
     include_package_data=True,
+    # https://caremad.io/2013/07/setup-vs-requirement/
     install_requires=["requests", "python-dateutil"],
 )
