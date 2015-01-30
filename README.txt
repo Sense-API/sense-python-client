@@ -10,7 +10,7 @@ Installation:
 
 Documentation:
 
-    http://sen.se/api/docs/v2/
+    https://sen.se/developers/
 
 Dev
 ---
