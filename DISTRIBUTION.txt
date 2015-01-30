@@ -6,7 +6,10 @@ Build the package
 Register the package
 ~~~~~~~~~~~~~~~~~~~
 
-Use the online form, https://testpypi.python.org/pypi?%3Aaction=submit_form
+Use the online form,
+
+    https://testpypi.python.org/pypi?%3Aaction=submit_form
+
 Don't fill it but instead upload the PKG-INFO file created by setup.py sdist (<package>.egg-info/PKG-INFO)
 
 Upload to PyPI

@@ -10,6 +10,5 @@ app_secret = None
 
 user_agent = 'Sen.se python client'
 
-from resources import User, Node, Feed, Subscription, Event
-from resources import Device, Application, Person
+from resources import User, Node, Feed, Subscription, Event, Device, Application
 from version import VERSION
