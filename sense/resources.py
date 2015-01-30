@@ -420,4 +420,3 @@ class Subscription(ListAPIResource, CreateUpdateAPIResource, DeleteAPIResource):
 
 class Device(ListAPIResource): pass
 class Application(ListAPIResource): pass
-class Person(ListAPIResource): pass
