@@ -1,8 +1,12 @@
+import sys
 import os
 from setuptools import setup
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'sense'))
+from version import VERSION
 
 setup(
     name='sense-python-client',

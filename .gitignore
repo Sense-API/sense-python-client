@@ -1,9 +1,19 @@
+.DS_Store
 .idea
 .coverage
 .svn
+.Python
+*.pyc
+
+# Build folderrs
 dist
+local
+sense_python_client.egg-info
+
+# Virtualenv
 bin
 include
 lib
-local
-*.pyc
+
+# iPython
+share

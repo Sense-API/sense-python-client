@@ -42,6 +42,27 @@ def filter_feeds(feeds):
         elif isinstance(f, basestring):
             yield f
 
+def prepare_request(params=None):
+    """
+    This allows each functions using requests to override auth parameters.
+    """
+
+    # Find and remove request settings from the parameters
+    from . import api_url, api_key, app_secret, user_agent
+    if params and 'api_url' in params:
+        api_url = params.pop('api_url')
+    if params and 'api_key' in params:
+        api_key = params.pop('api_key')
+    if params and 'app_secret' in params:
+        app_secret = params.pop('app_secret')
+
+    # Make a session
+    s = requests.Session()
+    s.auth = utils.SenseTokenAuth(api_key, app_secret)
+    s.headers.update({'User-Agent': user_agent})
+
+    return s, api_url, params
+
 
 class APIResource(dict):
     def __init__(self, uid=None, **params):
@@ -102,9 +123,9 @@ class APIResource(dict):
             super(APIResource, self).__setitem__(k, convert_to_sense_object(k, v))
 
     def _refresh(self, uid, params):
-        from . import api_url, api_key
+        s, api_url, params = prepare_request(params)
         url = api_url + self.instance_url(uid=uid)
-        r = requests.get(url, auth=utils.DRFTokenAuth(api_key), params=utils.process_params(params))
+        r = s.get(url, params=utils.expand(params))
         r.raise_for_status()
         self._refresh_from(r.json())
         return self
@@ -141,16 +162,16 @@ class ListAPIResource(APIResource):
 
     @classmethod
     def list(cls, **params):
-        from . import api_url, api_key
+        s, api_url, params = prepare_request(params)
         url = api_url + cls._class_url()
-        r = requests.get(url, auth=utils.DRFTokenAuth(api_key), params=utils.process_params(params))
+        r = s.get(url, params=utils.expand(params))
         r.raise_for_status()
         return convert_to_sense_object(None, r.json())
 
     def next(self):
         if self.get('links') and self.links.get('next'):
-            from . import api_url, api_key
-            r = requests.get(self.links.next, auth=utils.DRFTokenAuth(api_key))
+            s, _, __ = prepare_request()
+            r = s.get(self.links.next)
             r.raise_for_status()
             return self.construct_from(r.json())
         else:
@@ -158,8 +179,8 @@ class ListAPIResource(APIResource):
 
     def prev(self):
         if self.get('links') and self.links.get('prev'):
-            from . import api_url, api_key
-            r = requests.get(self.links.prev, auth=utils.DRFTokenAuth(api_key))
+            s, _, __ = prepare_request()
+            r = s.get(self.links.prev)
             r.raise_for_status()
             return self.construct_from(r.json())
         else:
@@ -183,14 +204,14 @@ class CreateUpdateAPIResource(APIResource):
 
     @classmethod
     def create(cls, **params):
-        from . import api_url, api_key
-        r = requests.post(api_url + cls._class_url(), data=params, auth=utils.DRFTokenAuth(api_key))
+        s, api_url, params = prepare_request(params)
+        r = s.post(api_url + cls._class_url(), data=params)
         r.raise_for_status()
         return convert_to_sense_object(None, r.json())
 
     def save(self):
-        from . import api_url, api_key
-        r = requests.put(api_url + self.instance_url(), data=self.serialize(), auth=utils.DRFTokenAuth(api_key))
+        s, api_url, _ = prepare_request()
+        r = s.put(api_url + self.instance_url(), data=self.serialize())
         r.raise_for_status()
         return convert_to_sense_object(None, r.json())
 
@@ -198,8 +219,8 @@ class CreateUpdateAPIResource(APIResource):
 class DeleteAPIResource(APIResource):
 
     def delete(self):
-        from . import api_url, api_key
-        r = requests.delete(api_url + self.instance_url(), auth=utils.DRFTokenAuth(api_key))
+        s, api_url, _ = prepare_request()
+        r = s.delete(api_url + self.instance_url())
         r.raise_for_status()
         return None
 
@@ -324,9 +345,9 @@ class Event(APIResource):
         >>> feed = sense.Feed.retrieve('{{ feed.uid }}')
         >>> feed.events.list(limit=3)
         """
-        from . import api_url, api_key
+        s, api_url, params = prepare_request(params)
         url = ''.join((api_url, self.feed_obj.instance_url().rstrip('/'), Event._class_url()))
-        r = requests.get(url, params=params, auth=utils.DRFTokenAuth(api_key))
+        r = s.get(url, params=params)
         r.raise_for_status()
         return convert_to_sense_object(None, r.json())
 
@@ -338,16 +359,11 @@ class Event(APIResource):
         >>> feed = sense.Feed('{{ feed.uid }}')
         >>> data = {'key': 'value', 'other-key': 'other-value' }
         >>> cur_date = datetime.datetime.utcnow()
-        >>> feed.events.create(data=data, dateEvent=cur_date.isoformat(), dateServer=cur_date.utcnow())
+        >>> feed.events.create(data=data, dateEvent=cur_date.isoformat())
         """
-        from . import api_url, api_key
-        if 'api_url' in params:
-            api_url = params.pop('api_url')
-        if 'api_key' in params:
-            api_key = params.pop('api_key')
+        s, api_url, params = prepare_request(params)
         url = ''.join((api_url, self.feed_obj.instance_url().rstrip('/'), Event._class_url()))
-        r = requests.post(url, data=json.dumps(params), auth=utils.DRFTokenAuth(api_key),
-                          headers={'Content-Type': 'application/json'})
+        r = s.post(url, data=json.dumps(params), headers=dict(s.headers, **{'Content-Type': 'application/json'}))
         r.raise_for_status()
 
 
