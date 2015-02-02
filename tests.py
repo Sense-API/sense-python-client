@@ -10,8 +10,8 @@ import httpretty
 import sense
 from sense.resources import APIResource, ListAPIResource
 
-DEFAULT_USER = 'pierre'
-API_URL = 'http://localhost:8000/api/v2'
+DEFAULT_USER = 'demoone' 
+API_URL = 'https://sen.se/api/v2'
 
 DUMMY_NODE = {
     "object": "node",
@@ -429,7 +429,7 @@ class TestIntegration(unittest.TestCase):
         t = sense.User.api_key(username='pierre', password='********')
         self.assertEqual(t, dummy_token)
 
-@unittest.skip("Skipping test hitting a live server")
+# @unittest.skip("Skipping test hitting a live server")
 class TestsIntegrationLiveServer(unittest.TestCase):
     fixtures = None
 
@@ -486,7 +486,7 @@ class TestsIntegrationLiveServer(unittest.TestCase):
         devices = sense.Node.list(resource__type='device')
         cookies = sense.Node.list(resource__slug='cookie')
 
-        p = len(cookies.objects) < len(devices.objects)
+        p = len(cookies.objects) <= len(devices.objects)
         self.assertTrue(p)
 
     def test_Node_retrieve(self):
