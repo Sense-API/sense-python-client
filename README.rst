@@ -13,6 +13,10 @@ Documentation: `https://sen.se/developers/ <https://sen.se/developers/>`_
 Development
 ~~~~~~~~~~~
 
+Source code::
+
+    $ git clone https://github.com/Sense-API/sense-python-client.git
+
 Requirements::
 
     $ pip install -r requirements.txt
