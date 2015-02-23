@@ -209,9 +209,11 @@ class CreateUpdateAPIResource(APIResource):
         r.raise_for_status()
         return convert_to_sense_object(None, r.json())
 
-    def save(self):
+    def save(self, **params):
         s, api_url, _ = prepare_request()
-        r = s.put(api_url + self.instance_url(), data=self.serialize())
+        data = self.serialize()
+        data.update(params)
+        r = s.put(api_url + self.instance_url(), data=data)
         r.raise_for_status()
         return convert_to_sense_object(None, r.json())
 
