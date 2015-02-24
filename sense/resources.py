@@ -215,7 +215,8 @@ class CreateUpdateAPIResource(APIResource):
         data.update(params)
         r = s.put(api_url + self.instance_url(), data=data)
         r.raise_for_status()
-        return convert_to_sense_object(None, r.json())
+        if r.status_code == 200:
+            return convert_to_sense_object(None, r.json())
 
 
 class DeleteAPIResource(APIResource):
