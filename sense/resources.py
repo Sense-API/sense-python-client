@@ -209,11 +209,14 @@ class CreateUpdateAPIResource(APIResource):
         r.raise_for_status()
         return convert_to_sense_object(None, r.json())
 
-    def save(self):
+    def save(self, **params):
         s, api_url, _ = prepare_request()
-        r = s.put(api_url + self.instance_url(), data=self.serialize())
+        data = self.serialize()
+        data.update(params)
+        r = s.put(api_url + self.instance_url(), data=data)
         r.raise_for_status()
-        return convert_to_sense_object(None, r.json())
+        if r.status_code == 200:
+            return convert_to_sense_object(None, r.json())
 
 
 class DeleteAPIResource(APIResource):
@@ -417,6 +420,14 @@ class Subscription(ListAPIResource, CreateUpdateAPIResource, DeleteAPIResource):
         """
         return super(Subscription, self).delete()
 
+
+class Person(ListAPIResource):
+    """
+    >>> import sense
+    >>> sense.api_key = '{{ api_key }}'
+    >>> persons = sense.Person.list()
+    """
+    pass
 
 class Device(ListAPIResource): pass
 class Application(ListAPIResource): pass
