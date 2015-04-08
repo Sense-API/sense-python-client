@@ -421,6 +421,14 @@ class Subscription(ListAPIResource, CreateUpdateAPIResource, DeleteAPIResource):
         return super(Subscription, self).delete()
 
 
+class Person(ListAPIResource):
+    """
+    >>> import sense
+    >>> sense.api_key = '{{ api_key }}'
+    >>> persons = sense.Person.list()
+    """
+    pass
+
 class Device(ListAPIResource): pass
 class Application(ListAPIResource): pass
-class Person(ListAPIResource): pass
+
